@@ -1,0 +1,57 @@
+
+
+
+
+
+
+
+
+
+
+server:
+  server_1:
+    type: ws
+    ws:
+      path: /ws
+      bind: :12345
+    heartbeat: 10s
+    location:
+      /server1:
+        backend: server_1
+
+      /server2:
+        backend: server_2
+  
+ 
+backend:
+  server_1:
+    sink:
+      type: redis
+      redis:
+        host: 127.0.0.1
+        port: 6397
+        key: "server_1"
+        db: 0
+        auth:
+    source:
+      type: redis
+      redis:
+        host: 127.0.0.1
+        port: 6397
+        key: "server_1"
+        db: 0
+        auth:
+
+  server_2:
+    sink:
+      type: grpc
+      grpc:
+        address: http://127.0.0.1
+
+  server_3:
+    sink:
+      type: memory
+      memory:
+        listen: 8001
+
+
